@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html ng-app="weatherApp">
+
+  <head>
+    <link data-require="bootstrap-css@3.3.6" data-semver="3.3.6" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" />
+    <link data-require="bootstrap@3.3.6" data-semver="3.3.6" rel="stylesheet" href="bootstrap" />
+    <script src="https://code.angularjs.org/1.5.8/angular.js" data-semver="1.5.8" data-require="angular.js@1.5.8"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main-weather.controller.js"></script>
+    <script src="overall-weather.controller.js"></script>
+    <script src="hourly-weather.controller.js"></script>
+    <script src="daily-weather.controller.js"></script>
+  </head>
+
+  <body>
+    <nav id="top" class="navbar navbar-default" ng-controller="mainWeatherController">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Bharath's Weather Channel</a>
+        </div>
+        
+        
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="#">Today's weather</a></li>
+            <li><a href="#hourly">Hourly forecast</a></li>
+            <li><a href="#daily">Daily forecast</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" ng-submit="getWeather(city)">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Enter Location" ng-model="city">
+            </div>
+            <button type="submit" class="btn btn-default">Get Weather</button>
+          </form>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    
+    <div ng-controller="overallWeatherController">
+      <div class="container">
+        <div class="jumbotron text-center" ng-hide="weather">
+            <h3><strong>Fetching your location</strong></h3>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="jumbotron text-center" ng-show="weather">
+          <h3><strong>Showing weather for {{weather.name}}</strong></h3>
+          <p><img ng-src="http://openweathermap.org/img/w/{{weather.weather[0].icon}}.png" title="{{weather.weather[0].main}}" alt="{{weather.weather[0].main}} icon">{{weather.main.temp}}&nbsp;&#8457;</p>
+        </div>
+      </div>
+      
+      <div class="container" ng-show="error">
+        {{error}}
+      </div>
+      
+      <div class="container" ng-show="weather">
+        <div class="panel panel-info">
+          
+          <div class="panel-heading">
+            Weather in {{weather.name}}
+          </div>
+          
+          <table class="table table-responsive table-hover table-striped table-bordered">
+            <tbody>
+              <tr>
+                <td>Pressure</td>
+                <td>{{weather.main.pressure}}&nbsp;in</td>
+              </tr>
+              <tr>
+                <td>Humidity</td>
+                <td>{{weather.main.humidity}}&nbsp;%</td>
+              </tr>
+              <tr>
+                <td>Min Temperature</td>
+                <td>{{weather.main.temp_min}}&nbsp;&#8457;</td>
+              <tr>
+                <td>Max Temperature</td>
+                <td>{{weather.main.temp_max}}&nbsp;&#8457;</td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div id="hourly" ng-controller="hourlyWeatherController">
+      <div class="container" ng-show="weather">
+        <div class="panel panel-info">
+          
+          <div class="panel-heading">
+            Hourly weather for {{weather.city.name}}
+          </div>
+          
+          <div class="panel-body">
+            
+            <table class="table table-responsive table-hover table-striped table-bordered">
+              <tbody>
+                <tr ng-repeat="hour in weather.list" ng-switch on="$index % 2">
+                  <td ng-switch-when="0">{{weather.list[$index].dt | date: "dd.MM.y h:mma"}}</td>
+                  <td ng-switch-when="0"><img ng-src="http://openweathermap.org/img/w/{{weather.list[$index].weather[0].icon}}.png" title="{{weather.list[$index].weather[0].main}}" alt="{{weather.list[$index].weather[0].main}} icon">{{weather.list[$index].main.temp}}&nbsp;&#8457;</td>
+                  
+                  <td ng-switch-when="0">{{weather.list[$index+1].dt | date: "dd.MM.y h:mma"}}</td>
+                  <td ng-switch-when="0"><img ng-src="http://openweathermap.org/img/w/{{weather.list[$index+1].weather[0].icon}}.png" title="{{weather.list[$index+1].weather[0].main}}" alt="{{weather.list[$index+1].weather[0].main}} icon">{{weather.list[$index+1].main.temp}}&nbsp;&#8457;</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div class="text-right">
+              <a class="btn btn-warning" href="#top" role="button" ng-show="weather" align="right">back to top</a>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="daily" ng-controller="dailyWeatherController">
+      <div class="container" ng-show="weather">
+        <div class="panel panel-info">
+          
+          <div class="panel-heading">
+            Daily weather for {{weather.city.name}}
+          </div>
+          
+          <div class="panel-body">
+            <table class="table table-responsive table-hover table-striped table-bordered">
+              <tbody>
+                <tr ng-repeat="hour in weather.list" ng-switch on="$index % 4">
+                  <td ng-switch-when="0">{{weather.list[$index].dt | date: "MMM dd"}}</td>
+                  <td ng-switch-when="0"><img ng-src="http://openweathermap.org/img/w/{{weather.list[$index].weather[0].icon}}.png" title="{{weather.list[$index].weather[0].main}}" alt="{{weather.list[$index].weather[0].main}} icon">{{weather.list[$index].temp.min}} - {{weather.list[$index].temp.max}}&nbsp;&#8457;</td>
+                  
+                  <td ng-switch-when="0">{{weather.list[$index+1].dt | date: "MMM dd"}}</td>
+                  <td ng-switch-when="0"><img ng-src="http://openweathermap.org/img/w/{{weather.list[$index+1].weather[0].icon}}.png" title="{{weather.list[$index+1].weather[0].main}}" alt="{{weather.list[$index+1].weather[0].main}} icon">{{weather.list[$index+1].temp.min}} - {{weather.list[$index+1].temp.max}}&nbsp;&#8457;</td>
+                  
+                  <td ng-switch-when="0">{{weather.list[$index+2].dt | date: "MMM dd"}}</td>
+                  <td ng-switch-when="0"><img ng-src="http://openweathermap.org/img/w/{{weather.list[$index+2].weather[0].icon}}.png" title="{{weather.list[$index+2].weather[0].main}}" alt="{{weather.list[$index+2].weather[0].main}} icon">{{weather.list[$index+2].temp.min}} - {{weather.list[$index+2].temp.max}}&nbsp;&#8457;</td>
+                  
+                  <td ng-switch-when="0" ng-if="weather.list[$index+3]">{{weather.list[$index+3].dt | date: "MMM dd"}}</td>
+                  <td ng-switch-when="0" ng-if="weather.list[$index+3]"><img ng-src="http://openweathermap.org/img/w/{{weather.list[$index+3].weather[0].icon}}.png" title="{{weather.list[$index+3].weather[0].main}}" alt="{{weather.list[$index+3].weather[0].main}} icon">{{weather.list[$index].temp.min}} - {{weather.list[$index].temp.max}}&nbsp;&#8457;</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-right"><a class="btn btn-warning" href="#top" role="button">back to top</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

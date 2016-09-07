@@ -1,0 +1,13 @@
+/* Styles go here */
+.navbar-default{
+  background-color: #0099ff;
+  color: white;
+}
+
+.jumbotron{
+  background-color: #e6f2ff;
+}
+
+td{
+  text-align:center;
+}
