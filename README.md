@@ -7,11 +7,11 @@ The user can optionally type in the location for which the weather will also be 
 Run in [Plunker] (http://run.plnkr.co/plunks/4FsF9i)
 
 ## Tech stack
-* Angular.js 1.5
+* Angular.js 1.5.8
 * Bootstrap CSS and JS 3.3.6
 
 ## Architecture: MVC
-* Geolocation API converted into promise using $q and served via a service getGeolocation
+* Geolocation API converted into a promise using $q [service] (https://docs.angularjs.org/api/ng/service/$q) and served via a service geolocationService
 * Location retrieved by MainController (controller)
 * Weather summary by overall-weather.controller.js (model & controller)
 * 3-Hour weather data for 3 days by hourly-weather.controller.js (model & controller)
