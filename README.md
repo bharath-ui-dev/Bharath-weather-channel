@@ -18,3 +18,5 @@ Run in [Plunker] (http://run.plnkr.co/plunks/4FsF9i)
 * 7-day weather data by daily-weather.controller.js (model & controller)
 * Entire data in single page in index.html (view)
 
+## Credits
+Code for split table view from [JSFiddle](http://jsfiddle.net/q8v3obsq/227/)
