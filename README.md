@@ -4,7 +4,7 @@ This Angular 1.5.8 project uses API provided by openweather.org and Geolocation 
 The user can optionally type in the location for which the weather will also be loaded.
 
 ## Code in action
-Run in [Plunker] (http://run.plnkr.co/plunks/4FsF9i)
+Run in [Plunker] (http://run.plnkr.co/plunks/4FsF9i) (not functional yet)
 
 ## Tech stack
 * [Angular.js 1.5.8] (http://angularjs.org)
